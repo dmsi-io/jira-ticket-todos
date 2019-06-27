@@ -20,6 +20,10 @@
   "scripts": {
     "test": "mocha tests --recursive"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Adam-Schlichtmann/jira-ticket-todos"
+  },
   "author": "Adam",
   "license": "ISC"
 }
