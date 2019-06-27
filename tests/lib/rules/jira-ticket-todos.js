@@ -1,5 +1,5 @@
 /**
- * @fileoverview detect TODO tags taht don&#39;t have a jira ticket number attached to them
+ * @fileoverview detect TODO tags that do not have a jira ticket number attached to them
  * @author Adam
  */
 "use strict";

@@ -1,5 +1,3 @@
-const { get } = require('dot-prop');
-
 const thing = {
   meta: {
     docs: {
