@@ -1,0 +1,26 @@
+# Modules
+node_modules/
+.expo/
+npm-debug.*
+yarn-error.log
+credentials/
+credentials.json
+
+# IDEs
+.vscode/
+.idea/
+
+# testing
+coverage/
+reports/
+
+# builds
+build/
+dist/
+buildout.txt
+build-*.tar.gz
+ios/
+android/
+
+# macOS
+.DS_Store

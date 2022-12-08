@@ -1,68 +1,140 @@
 /**
  * @fileoverview detect TODO tags that do not have a jira ticket number attached to them
- * @author Adam
+ * @author Adam Schlichtmann
  */
-"use strict";
-
-//------------------------------------------------------------------------------
-// Requirements
-//------------------------------------------------------------------------------
-
-var rule = require("../../../index.js"),
-
-    RuleTester = require("eslint").RuleTester;
-    RuleTester.setDefaultConfig({
-        parserOptions: {
-          ecmaVersion: 6,
-          sourceType: "module"
-        }
-      });
+'use strict';
+const rule = require('../../../index.js');
+const { RuleTester } = require('eslint');
+RuleTester.setDefaultConfig({
+  parserOptions: {
+    ecmaVersion: 6,
+    sourceType: 'module',
+  },
+});
 
 
-//------------------------------------------------------------------------------
-// Tests
-//------------------------------------------------------------------------------
+new RuleTester().run('jira-ticket-todos', rule.rules['jira-ticket-todos'], {
+  valid: [
+    '// TODO: IS-455',
+    '// TODO: AW-62',
+    '// TODO MIA-323',
+    '// TODO WE-2',
+    { code: '// TODO', options: [{ matchString: 'X' }] },
+    { code: '// TODO', options: [{ matchString: 'X', ignoreCase: true }] },
+    { code: '// TODO', options: [{ matchString: 'todo' }] }
+  ],
 
-var ruleTester = new RuleTester();
-ruleTester.run("jira-ticket-todos", rule, {
-
-    valid: [
-        "// TODO: IS-455",
-        "// TODO: AW-62",
-        "// TODO MIA-323",
-        "// TODO WE-2",
-        // give me some code that won't trigger a warning
-    ],
-
-    invalid: [
+  invalid: [
+    {
+      code: '// TODO: Hello how is your day Mine is good',
+      errors: [
         {
-            code: "// TODO: Hello how is your day Mine is good",
-            errors: [{
-                message: "Add a Jira ticket number (EG: AW-62)",
-                type: "Program"
-            }]
+          message:
+            "Comments containing 'TODO' must contain a Jira story number (e.g., ABC-123).",
+          type: 'Line',
         },
+      ],
+    },
+    {
+      code: '// TODO: aw-1',
+      errors: [
         {
-            code: "// TODO: aw-1",
-            errors: [{
-                message: "Add a Jira ticket number (EG: AW-62)",
-                type: "Program"
-            }]
+          message:
+            "Comments containing 'TODO' must contain a Jira story number (e.g., ABC-123).",
+          type: 'Line',
         },
+      ],
+    },
+    {
+      code: '// TODO:',
+      errors: [
         {
-            code: "// TODO:",
-            errors: [{
-                message: "Add a Jira ticket number (EG: AW-62)",
-                type: "Program"
-            }]
+          message:
+            "Comments containing 'TODO' must contain a Jira story number (e.g., ABC-123).",
+          type: 'Line',
         },
+      ],
+    },
+    {
+      code: '// TODO: AQ 234',
+      errors: [
         {
-            code: "// TODO: AQ 234",
-            errors: [{
-                message: "Add a Jira ticket number (EG: AW-62)",
-                type: "Program"
-            }]
-        }
-
-    ]
+          message:
+            "Comments containing 'TODO' must contain a Jira story number (e.g., ABC-123).",
+          type: 'Line',
+        },
+      ],
+    },
+    {
+      code: '// XXX: AQ 234',
+      options: [{ matchString: 'XXX' }],
+      errors: [
+        {
+          message:
+            "Comments containing 'XXX' must contain a Jira story number (e.g., ABC-123).",
+          type: 'Line',
+        },
+      ],
+    },
+    {
+      code: '// XXX: AQ 234',
+      options: [{ matchString: 'xxx', ignoreCase: true }],
+      errors: [
+        {
+          message:
+            "Comments containing 'xxx' must contain a Jira story number (e.g., ABC-123).",
+          type: 'Line',
+        },
+      ],
+    },
+    {
+      code: '// xXx: AQ 234',
+      options: [{ matchString: 'xxx', ignoreCase: true }],
+      errors: [
+        {
+          message:
+            "Comments containing 'xxx' must contain a Jira story number (e.g., ABC-123).",
+          type: 'Line',
+        },
+      ],
+    },
+    {
+      code: '// TODO: AQ 234\nlet foo = 3;',
+      errors: [
+        {
+          message:
+            "Comments containing 'TODO' must contain a Jira story number (e.g., ABC-123).",
+          type: 'Line',
+          column: 1,
+          endColumn: 16,
+        },
+      ],
+    },
+    {
+      code: 'let foo = 3; // TODO: AQ 234',
+      errors: [
+        {
+          message:
+            "Comments containing 'TODO' must contain a Jira story number (e.g., ABC-123).",
+          type: 'Line',
+          column: 14,
+          endColumn: 29,
+        },
+      ],
+    },
+    {
+      code: '/*\n* TODO:\n* This is a test\n* for block columns\n*/',
+      errors: [
+        {
+          message:
+            "Comments containing 'TODO' must contain a Jira story number (e.g., ABC-123).",
+          type: 'Block',
+          column: 1,
+          line: 1,
+          endColumn: 3,
+          endLine: 5,
+        },
+      ],
+    },
+  ],
 });
