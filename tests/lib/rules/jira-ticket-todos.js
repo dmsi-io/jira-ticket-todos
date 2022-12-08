@@ -12,7 +12,6 @@ RuleTester.setDefaultConfig({
   },
 });
 
-
 new RuleTester().run('jira-ticket-todos', rule.rules['jira-ticket-todos'], {
   valid: [
     '// TODO: IS-455',
@@ -21,7 +20,7 @@ new RuleTester().run('jira-ticket-todos', rule.rules['jira-ticket-todos'], {
     '// TODO WE-2',
     { code: '// TODO', options: [{ matchString: 'X' }] },
     { code: '// TODO', options: [{ matchString: 'X', ignoreCase: true }] },
-    { code: '// TODO', options: [{ matchString: 'todo' }] }
+    { code: '// TODO', options: [{ matchString: 'todo' }] },
   ],
 
   invalid: [

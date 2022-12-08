@@ -20,22 +20,24 @@ module.exports = {
               ignoreCase: {
                 default: false,
                 type: 'boolean',
-              }
+              },
             },
-            required: ["matchString"],
+            required: ['matchString'],
             type: 'object',
           },
         ],
       },
-      create: (context) => ({
-        Program: (node) => {
+      create: context => ({
+        Program: node => {
           const config = context.options[0] || { matchString: 'TODO' };
-          const todoMatcher = new RegExp(config.matchString, config.ignoreCase ? 'i' : '');
-          console.log('comments', node.comments)
+          const todoMatcher = new RegExp(
+            config.matchString,
+            config.ignoreCase ? 'i' : '',
+          );
           // Check if there are comments
           if (node.comments && node.comments.length) {
             // Contains TODO
-            node.comments.forEach((comment) => {
+            node.comments.forEach(comment => {
               const { value } = comment;
               // Contains 2-4 letters with a - followed by a number EG: AW-62 or MIA-124152
               if (todoMatcher.test(value) && !/[A-Z]{2,4}-\d+/.test(value)) {
