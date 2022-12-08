@@ -26,6 +26,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Node
+        uses: actions/setup-node@v3
+        with:
+          cache: 'yarn'
+
+      - name: Install
+        run: yarn install --frozen-lockfile --prefer-offline
+        shell: bash
+
       - name: Test
         run: yarn test
         shell: bash
