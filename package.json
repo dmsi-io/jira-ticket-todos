@@ -27,8 +27,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Adam-Schlichtmann/jira-ticket-todos"
+    "url": "https://github.com/dmsi-io/jira-ticket-todos"
   },
-  "author": "Adam",
+  "author": "DMSi",
   "license": "ISC"
 }
